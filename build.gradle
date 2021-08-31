@@ -1,11 +1,11 @@
 plugins {
-    id 'java-library'
     id 'java'
-    id 'maven'
+    id 'maven-publish'
 }
 
 group 'com.hirshi001'
 version '1.0.5'
+
 sourceCompatibility = JavaVersion.VERSION_1_8;
 targetCompatibility = JavaVersion.VERSION_1_8;
 
