@@ -219,12 +219,13 @@ public class Logger extends PrintStream{
     }
 
     public Logger debug(boolean debug){
-        debug(debug, ConsoleColors.RESET, "[", "] ");
+        this.debug = debug;
         return this;
     }
 
     public Logger debug(String color){
-        debug(true, color, "[", "] ");
+        this.debug = debug;
+        this.debugColor = color;
         return this;
 
     }

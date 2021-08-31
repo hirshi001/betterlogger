@@ -8,24 +8,6 @@ version '1.0.3'
 sourceCompatibility = JavaVersion.VERSION_1_8;
 targetCompatibility = JavaVersion.VERSION_1_8;
 
-publishing {
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/hirshi001/betterlogger")
-            credentials {
-                username = project.findProperty("name")
-                password = project.findProperty("key")
-            }
-        }
-    }
-    publications {
-        gpr(MavenPublication) {
-            from(components.java)
-        }
-    }
-}
-
 repositories {
     mavenCentral()
     mavenLocal()
