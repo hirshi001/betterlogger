@@ -8,6 +8,20 @@ version '1.0.5'
 sourceCompatibility = JavaVersion.VERSION_1_8;
 targetCompatibility = JavaVersion.VERSION_1_8;
 
+
+publishing {
+    repositories {
+        maven {
+            url = uri("")
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
+        }
+    }
+}
+
 repositories {
     mavenCentral()
     mavenLocal()
