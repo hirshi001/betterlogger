@@ -20,16 +20,14 @@ public class Logger extends PrintStream{
     private boolean debug, debugShort;
     private String debugColor, debugBefore, debugAfter;
     private PrintStream err;
-    private final String name;
 
-    public Logger(String name){
-        this(name, System.out, System.err);
+    public Logger(){
+        this(System.out, System.err);
     }
 
     @SafeVarargs
-    public Logger(String name, OutputStream out, PrintStream err, Supplier<String>... stringSuppliers){
+    public Logger(OutputStream out, PrintStream err, Supplier<String>... stringSuppliers){
         super(out);
-        this.name = name;
         this.err = err;
         this.stringSuppliers = new ArrayList<>(stringSuppliers.length);
         for(Supplier<String> stringSupplier:stringSuppliers){
@@ -254,10 +252,6 @@ public class Logger extends PrintStream{
     public Logger setErr(PrintStream err) {
         this.err = err;
         return this;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public static StackTraceElement getLineNumber(int depth){

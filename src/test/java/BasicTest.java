@@ -13,18 +13,10 @@ public class BasicTest {
 
     Logger logger;
 
-    public static void resetLoggerMappings(){
-        try {
-            Field f = Logger.class.getDeclaredField("LOGGER_MAPPINGS");
-            f.setAccessible(true);
-            ((Map<?, ?>) f.get(null)).clear();
-        }catch(Exception e){}
-    }
 
     @BeforeEach
     public void setup(){
-        resetLoggerMappings();
-        logger = new Logger("test", System.out, System.err,
+        logger = new Logger(System.out, System.err,
                 new DateStringFunction(ConsoleColors.GREEN, "[", "] "),
                 ()-> (ConsoleColors.PURPLE + "[SERVER] " + ConsoleColors.RESET));
 

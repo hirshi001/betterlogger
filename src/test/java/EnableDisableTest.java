@@ -10,8 +10,7 @@ public class EnableDisableTest {
 
     @BeforeEach
     public void init(){
-        BasicTest.resetLoggerMappings();
-        logger1 = new Logger("test", System.out, System.err,
+        logger1 = new Logger(System.out, System.err,
                 ()->(ConsoleColors.BLACK + "[Logger 1] " + ConsoleColors.RESET),
                 new DateStringFunction(ConsoleColors.CYAN, "[", "] "));
     }

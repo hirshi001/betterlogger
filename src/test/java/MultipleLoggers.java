@@ -9,19 +9,18 @@ public class MultipleLoggers {
 
     @BeforeEach
     public void init(){
-        BasicTest.resetLoggerMappings();
     }
 
 
     @Test
     public void MultipleLoggersTest1(){
-        Logger logger1 = new Logger("logger1", System.out, System.err,
+        Logger logger1 = new Logger(System.out, System.err,
                 ()->(ConsoleColors.BLACK + "[Logger 1] " + ConsoleColors.RESET),
                 new DateStringFunction(ConsoleColors.CYAN, "[", "] "));
-        Logger logger2 = new Logger("xf8b", System.out, System.err,
+        Logger logger2 = new Logger(System.out, System.err,
                 new DateStringFunction(ConsoleColors.BLUE, "[", "] "),
                 ()->ConsoleColors.YELLOW + "xf8b: " + ConsoleColors.RESET);
-        Logger logger3 = new Logger("sparky", System.out, System.err,
+        Logger logger3 = new Logger(System.out, System.err,
                 new DateStringFunction(ConsoleColors.BLUE, "[", "] "),
                 ()-> ConsoleColors.PURPLE+ "sparky: " + ConsoleColors.RESET);
 
