@@ -28,6 +28,7 @@ public class Logger extends PrintStream{
     @SafeVarargs
     public Logger(OutputStream out, PrintStream err, Supplier<String>... stringSuppliers){
         super(out);
+        System.out.println("Logger created");
         this.err = err;
         this.stringSuppliers = new ArrayList<>(stringSuppliers.length);
         for(Supplier<String> stringSupplier:stringSuppliers){
