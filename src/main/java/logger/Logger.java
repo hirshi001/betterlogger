@@ -2,12 +2,7 @@ package logger;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -20,6 +15,7 @@ public class Logger extends PrintStream{
     private boolean debug, debugShort;
     private String debugColor, debugBefore, debugAfter;
     private PrintStream err;
+    private int logLevel = LOG;
 
     public Logger(){
         this(System.out, System.err);
@@ -41,98 +37,126 @@ public class Logger extends PrintStream{
         debugShort = false;
     }
 
+    public Logger logLevel(int logLevel){
+        this.logLevel = logLevel;
+        return this;
+    }
+
     @Override
     public void println(String message) {
-        log(message,1);
+        log0(message + '\n',1);
     }
 
     @Override
     public void println(Object x) {
-        log(x,1);
+        log0(String.valueOf(x) + '\n',1);
     }
 
     public void println(String message, int depth){
-        log(message, depth+1);
+        log0(message + '\n', depth+1);
     }
 
     @Override
     public void println(boolean x) {
-        println(String.valueOf(x), 1);
+        log0(String.valueOf(x) + '\n', 1);
     }
 
     @Override
     public void println(char x) {
-        println(String.valueOf(x), 1);
+        log0(String.valueOf(x) + '\n', 1);
     }
 
     @Override
     public void println(int x) {
-        println(String.valueOf(x), 1);
+        log0(String.valueOf(x) + '\n', 1);
     }
 
     @Override
     public void println(long x) {
-        println(String.valueOf(x), 1);
+        log0(String.valueOf(x) + '\n', 1);
     }
 
     @Override
     public void println(float x) {
-        println(String.valueOf(x), 1);
+        log0(String.valueOf(x) + '\n', 1);
     }
 
     @Override
     public void println(double x) {
-        println(String.valueOf(x), 1);
+        log0(String.valueOf(x) + '\n', 1);
     }
 
     @Override
     public void println(char[] x) {
-        println(String.valueOf(x), 1);
+        log0(String.valueOf(x) + '\n', 1);
     }
 
     public Logger log(Object object){
-        String msg = object==null ? "null" : object.toString();
-        logMessage(msg, 1);
+        if(!checkLog(LOG)) return this;
+        log0(String.valueOf(object), 1);
         return this;
     }
 
     public Logger log(String message){
-        logMessage(message, 1);
+        if(!checkLog(LOG)) return this;
+        log0(message, 1);
         return this;
     }
 
     public Logger log(String message, Object... args){
-        logMessage(String.format(message, args), 1);
+        if(!checkLog(LOG)) return this;
+        log0(String.format(message, args), 1);
         return this;
     }
 
     public Logger log(Object object, int depth){
-        String msg = object==null ? "null" : object.toString();
-        logMessage(msg, depth+1);
+        if(!checkLog(LOG)) return this;
+        log0(String.valueOf(object), depth+1);
         return this;
     }
 
     public Logger log(String message, int depth){
-        logMessage(message, depth+1);
+        if(!checkLog(LOG)) return this;
+        log0(message, depth+1);
         return this;
     }
 
     public Logger log(String message, int depth, Object... args){
-        logMessage(String.format(message, args), depth+1);
+        if(!checkLog(LOG)) return this;
+        log0(String.format(message, args), depth+1);
         return this;
     }
 
     public Logger warn(Object object){
-        log(ConsoleColors.RED + "[WARN] " + ConsoleColors.RESET + object, 1);
+        if(!checkLog(WARN)) return this;
+        warn0(object.toString(), 1);
         return this;
     }
 
     public Logger warn(String message){
-        log(ConsoleColors.RED + "[WARN] " + ConsoleColors.RESET + message, 1);
+        if(!checkLog(WARN)) return this;
+        warn0(message, 1);
         return this;
     }
 
-    private Logger logMessage(String message, int depth){
+    public Logger warn(Object object, int depth){
+        if(!checkLog(WARN)) return this;
+        warn0(object.toString(), depth);
+        return this;
+    }
+
+    public Logger warn(String message, int depth){
+        if(!checkLog(WARN)) return this;
+        warn0(message, depth+1);
+        return this;
+    }
+
+    private void warn0(String message, int depth){
+        log0(ConsoleColors.RED + "[WARN] " + ConsoleColors.RESET + message, depth+1);
+    }
+
+    private Logger log0(String message, int depth){
+        if(!checkLog(LOG)) return this;
         synchronized (this) {
             String[] lines = message.split("\n");
             StringBuilder builder = new StringBuilder();
@@ -144,6 +168,34 @@ public class Logger extends PrintStream{
             super.print(builder.toString());
         }
         return this;
+    }
+
+    public Logger error(Object object){
+        if(!checkLog(ERROR)) return this;
+        error0(object.toString(), 1);
+        return this;
+    }
+
+    public Logger error(String message){
+        if(!checkLog(ERROR)) return this;
+        error0(message, 1);
+        return this;
+    }
+
+    public Logger error(Object object, int depth){
+        if(!checkLog(ERROR)) return this;
+        error0(object.toString(), depth+1);
+        return this;
+    }
+
+    public Logger error(String message, int depth){
+        if(!checkLog(ERROR)) return this;
+        error0(message, depth+1);
+        return this;
+    }
+
+    private void error0(String message, int depth){
+        log0(ConsoleColors.RED + "[ERROR] " + ConsoleColors.RESET + message, depth+1);
     }
 
 
@@ -246,6 +298,10 @@ public class Logger extends PrintStream{
         return debug;
     }
 
+    public boolean getDebugShort(){
+        return debugShort;
+    }
+
     public PrintStream getErr() {
         return err;
     }
@@ -274,6 +330,10 @@ public class Logger extends PrintStream{
                         (element.getFileName() != null ? "(" + element.getFileName() + ")" : "(Unknown Source)")));
         return messageBuilder.toString();
 
+    }
+
+    private boolean checkLog(int logLevel){
+        return logLevel >= this.logLevel;
     }
 
 }

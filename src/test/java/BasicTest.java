@@ -55,8 +55,9 @@ public class BasicTest {
     public void debugTest(){
         logger.log("pre debug call");
         logger.debug(ConsoleColors.BLUE);
-        logger.debugShort(true);
+        logger.debugShort(false).debug();
         logger.log("post debug call");
+        soutPrint();
         logger.log("send post debug call");
         logger.debug(false);
         logger.log("debug disabled");
